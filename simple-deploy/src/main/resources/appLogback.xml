@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+  <contextName>simplecenter</contextName>
+  <!--配置常量，在后面的配置中使用 -->
+  <property name="PROJECT_NAME" value="simplecenter"/>
+  <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径 -->
+  <property name="LOG_HOME" value="/data/logs/${PROJECT_NAME}"/>
+  <!--定义日志输出格式 -->
+  <property name="LOG_PATTERN"
+    value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{username}][%X{INSIGHT_REQUEST_ID}][%thread] %-5level %logger{60} - %msg%n"/>
+  <!-- 定义日志输出字符集 -->
+  <property name="LOG_CHARSET" value="UTF-8"/>
+
+  <!-- 控制台 -->
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <pattern>${LOG_PATTERN}</pattern>
+      <charset>${LOG_CHARSET}</charset>
+    </encoder>
+  </appender>
+  <!-- 全量日志 -->
+  <appender name="PROJECT-COMMON" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_HOME}/${PROJECT_NAME}-common.log</file>
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <pattern>${LOG_PATTERN}</pattern>
+      <charset>${LOG_CHARSET}</charset>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_HOME}/${PROJECT_NAME}-common_%d{yyyy-MM-dd}.log
+      </fileNamePattern>
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+  </appender>
+  <!-- 错误日志 -->
+  <appender name="PROJECT-ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_HOME}/${PROJECT_NAME}-error.log</file>
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <pattern>${LOG_PATTERN}</pattern>
+      <charset>${LOG_CHARSET}</charset>
+    </encoder>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>ERROR</level>
+    </filter>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_HOME}/${PROJECT_NAME}-error_%d{yyyy-MM-dd}.log
+      </fileNamePattern>
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+  </appender>
+
+  <!-- 业务日志 -->
+  <appender name="PROJECT-BIZ" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_HOME}/${PROJECT_NAME}-biz.log</file>
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <pattern>${LOG_PATTERN}</pattern>
+      <charset>${LOG_CHARSET}</charset>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_HOME}/${PROJECT_NAME}-biz_%d{yyyy-MM-dd}.log
+      </fileNamePattern>
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+  </appender>
+
+  <!-- 持久层日志 -->
+  <appender name="PROJECT-DAL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_HOME}/${PROJECT_NAME}-dal.log</file>
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <pattern>${LOG_PATTERN}</pattern>
+      <charset>${LOG_CHARSET}</charset>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_HOME}/${PROJECT_NAME}-dal_%d{yyyy-MM-dd}.log
+      </fileNamePattern>
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+  </appender>
+
+  <!-- 调用接口日志 -->
+  <appender name="PROJECT-INTEG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_HOME}/${PROJECT_NAME}-integ.log</file>
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <pattern>${LOG_PATTERN}</pattern>
+      <charset>${LOG_CHARSET}</charset>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_HOME}/${PROJECT_NAME}-integ_%d{yyyy-MM-dd}.log
+      </fileNamePattern>
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+  </appender>
+
+  <!-- 调用dubbo日志 -->
+  <appender name="PROJECT-DUBBO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_HOME}/${PROJECT_NAME}-dubbo.log</file>
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <pattern>${LOG_PATTERN}</pattern>
+      <charset>${LOG_CHARSET}</charset>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_HOME}/${PROJECT_NAME}-dubbo_%d{yyyy-MM-dd}.log
+      </fileNamePattern>
+      <maxHistory>30</maxHistory>
+    </rollingPolicy>
+  </appender>
+  <!-- dubbo调用日志 -->
+  <logger name="com.qccr.hammer.filter.dubbo.DubboTrackFilter" level="debug" additivity="true">
+    <appender-ref ref="PROJECT-INTEG"/>
+    <appender-ref ref="PROJECT-COMMON"/>
+  </logger>
+  <!-- dubbo的日志，error级别 -->
+  <logger name="com.alibaba.dubbo" level="debug" additivity="false">
+    <appender-ref ref="PROJECT-DUBBO"/>
+    <appender-ref ref="PROJECT-ERROR"/>
+    <appender-ref ref="PROJECT-COMMON"/>
+  </logger>
+  <logger name="com.ncarzone.data.simplecenter.biz" level="debug" additivity="true">
+    <appender-ref ref="PROJECT-BIZ"/>
+    <appender-ref ref="PROJECT-COMMON"/>
+  </logger>
+
+  <logger name="com.ncarzone.data.simplecenter.web" level="debug" additivity="true">
+    <appender-ref ref="PROJECT-BIZ"/>
+    <appender-ref ref="PROJECT-COMMON"/>
+  </logger>
+
+  <!-- 持久层日志 -->
+  <logger name="com.ncarzone.data.simplecenter.mapper" level="debug" additivity="true">
+    <appender-ref ref="PROJECT-DAL"/>
+    <appender-ref ref="PROJECT-COMMON"/>
+  </logger>
+
+  <!-- （1）root中只配置控制台日志，其他所有的日志把additivity设置为true都打到控制台，方便开发阶段定位问题。 -->
+  <!-- （2）第三方框架的日志抽取到单独的文件中，并且级别为ERROR。 -->
+  <!-- root -->
+  <root level="ERROR">
+    <appender-ref ref="CONSOLE"/>
+    <appender-ref ref="PROJECT-COMMON"/>
+    <appender-ref ref="PROJECT-ERROR"/>
+  </root>
+
+  <root level="INFO">
+    <appender-ref ref="Console"/>
+  </root>
+</configuration>

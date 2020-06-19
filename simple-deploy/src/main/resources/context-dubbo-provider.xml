@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        ">
+
+  <!--<dubbo:registry protocol="zookeeper" address="${registry.server.address}" wait="${registry.wait}"
+    timeout="3000"/>-->
+  <dubbo:registry id="registry" protocol="zookeeper" address="zookeeper://localhost:2181" />
+
+  <!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
+  <dubbo:application name="simplecenter" logger="slf4j"/>
+  <!--all 所有消息都派发到线程池，包括请求，响应，连接事件，断开事件，心跳等。
+    direct 所有消息都不派发到线程池，全部在IO线程上直接执行。
+    message 只有请求响应消息派发到线程池，其它连接断开事件，心跳等消息，直接在IO线程上执行,服务端线程池打满之后立即返回失败，避免调用端一直等待超时
+    execution 只请求消息派发到线程池，不含响应，响应和其它连接断开事件，心跳等消息，直接在IO线程上执行。
+    connection 在IO线程上，将连接断开事件放入队列，有序逐个执行，其它消息派发到线程池-->
+  <dubbo:protocol name="dubbo" port="20881" dispatcher="message"/>
+  <dubbo:provider delay="-1" timeout="2000" retries="0" threads="300" threadpool="fixed"/>
+
+  <dubbo:protocol name="dubbo" port="20880" />
+  <bean id="simpleServiceFacadeImpl" class="com.ncarzone.data.simple.center.biz.SimpleServiceImpl" />
+  <dubbo:service registry="registry" interface="com.ncarzone.data.simple.center.facade.SimpleServiceFacade" ref="simpleServiceFacadeImpl" version="1.0.0" protocol="dubbo" timeout="2000" connections="10" />
+
+
+</beans>

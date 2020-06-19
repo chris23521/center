@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+  xmlns:dubb="http://dubbo.apache.org/schema/dubbo"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
+
+
+  <!-- 使用zookeeper注册中心暴露服务地址 -->
+
+  <dubbo:registry protocol="zookeeper" address="zookeeper://localhost:2181" wait="2000" timeout="5000"/>
+
+<!--  <dubb:reference registry="aaa" id="menuServiceFacade" interface="com.ncarzone.authcenter.facade.service.menu.MenuServiceFacade" version="1.0.0" timeout="5000" check="true" />-->
+
+</beans>
