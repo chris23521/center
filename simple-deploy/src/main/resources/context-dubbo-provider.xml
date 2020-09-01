@@ -10,7 +10,7 @@
 
   <!--<dubbo:registry protocol="zookeeper" address="${registry.server.address}" wait="${registry.wait}"
     timeout="3000"/>-->
-  <dubbo:registry id="registry" protocol="zookeeper" address="zookeeper://localhost:2181" />
+  <dubbo:registry id="registry" protocol="zookeeper" address="zookeeper://172.22.7.169:2181" />
 
   <!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
   <dubbo:application name="simplecenter" logger="slf4j"/>
@@ -23,8 +23,22 @@
   <dubbo:provider delay="-1" timeout="2000" retries="0" threads="300" threadpool="fixed"/>
 
   <dubbo:protocol name="dubbo" port="20880" />
+
+  <!-- simple例子 -->
   <bean id="simpleServiceFacadeImpl" class="com.ncarzone.data.simple.center.biz.SimpleServiceImpl" />
-  <dubbo:service registry="registry" interface="com.ncarzone.data.simple.center.facade.SimpleServiceFacade" ref="simpleServiceFacadeImpl" version="1.0.0" protocol="dubbo" timeout="2000" connections="10" />
+  <dubbo:service registry="registry" interface="com.ncarzone.data.simple.center.facade.SimpleServiceFacade" ref="simpleServiceFacadeImpl"
+                 version="1.0.0"
+                 protocol="dubbo"
+                 timeout="2000"
+                 connections="10" />
+
+  <!-- aviator -->
+  <bean id="aviatorServiceImpl" class="com.ncarzone.data.simple.center.biz.AviatorServiceImpl" />
+  <dubbo:service registry="registry" interface="com.ncarzone.data.simple.center.facade.AviatorService" ref="aviatorServiceImpl"
+                 version="1.0.0"
+                 protocol="dubbo"
+                 timeout="2000"
+                 connections="10" />
 
 
 </beans>

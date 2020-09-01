@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @ApiScan
-@Api(tags = { "测试Quick BI URL" })
+@Api(tags = { "示例" })
 @Controller
 @RequestMapping("/simple")
 public class SimpleController {
