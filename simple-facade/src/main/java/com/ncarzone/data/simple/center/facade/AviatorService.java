@@ -14,10 +14,9 @@ import java.util.Map;
 
 public interface AviatorService {
     /**
-     * Description: 获取用户标签接口
+     * 获取用户标签接口
      * @param userId 用户标识
      * @param userTagArr 用户标签数组，空数组，则取该用户所有标签，非空则取tagArr范围内的标签
-     * @return
      */
     public ResultSet<Map<String, String>> getUserTagInfo(String userId, String[] userTagArr);
 
@@ -25,7 +24,6 @@ public interface AviatorService {
      * 获取组合标签
      * @param userId 用户标识
      * @param complexTagArr 组合标签数组，空数组，则取该用户所有标签，非空则取tagArr范围内的标签
-     * @return
      */
     public ResultSet<Map<String, String>> getComplexTagInfo(String userId, String[] complexTagArr);
 
