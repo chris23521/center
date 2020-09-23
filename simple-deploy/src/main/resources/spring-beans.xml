@@ -11,4 +11,28 @@
 
     <bean id="baseContainer" class="com.ncarzone.data.simple.center.biz.base.BaseContainer" init-method="start" destroy-method="stop" />
 
+
+    <bean id="executableClient" class="com.alibaba.xxpt.gateway.shared.client.http.ExecutableClient"
+          factory-method="getInstance" init-method="init" destroy-method="destroy">
+        <property name="protocal" value="111"/>
+        <property name="domainName" value="222"/>
+        <property name="accessKey" value="444"/>
+        <property name="secretKey" value="333"/>
+    </bean>
+
+    <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <property name="beanNames">
+            <list>
+                <value>entityDefineService</value>
+                <value>mdcEntityDataCallService</value>
+            </list>
+        </property>
+        <property name="interceptorNames">
+
+            <list>
+                <!-- 外部服务认证 --> <value>epaasAdvice</value>
+            </list>
+        </property>
+    </bean>
+
 </beans>
