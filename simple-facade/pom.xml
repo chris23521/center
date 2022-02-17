@@ -24,24 +24,24 @@
 
 
   <dependencies>
-    <dependency>
-      <groupId>com.qccr.commons</groupId>
-      <artifactId>knife</artifactId>
-      <exclusions>
-        <exclusion>
-          <artifactId>httpclient</artifactId>
-          <groupId>org.apache.httpcomponents</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>spring-core</artifactId>
-          <groupId>org.springframework</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>spring-aop</artifactId>
-          <groupId>org.springframework</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
+<!--    <dependency>-->
+<!--      <groupId>com.qccr.commons</groupId>-->
+<!--      <artifactId>knife</artifactId>-->
+<!--      <exclusions>-->
+<!--        <exclusion>-->
+<!--          <artifactId>httpclient</artifactId>-->
+<!--          <groupId>org.apache.httpcomponents</groupId>-->
+<!--        </exclusion>-->
+<!--        <exclusion>-->
+<!--          <artifactId>spring-core</artifactId>-->
+<!--          <groupId>org.springframework</groupId>-->
+<!--        </exclusion>-->
+<!--        <exclusion>-->
+<!--          <artifactId>spring-aop</artifactId>-->
+<!--          <groupId>org.springframework</groupId>-->
+<!--        </exclusion>-->
+<!--      </exclusions>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>com.github.pagehelper</groupId>
       <artifactId>pagehelper</artifactId>
@@ -49,14 +49,14 @@
   </dependencies>
 
   <distributionManagement>
-    <repository>
-      <id>releases</id>
-      <url>https://maven.carzone365.com/repository/maven-releases/</url>
-    </repository>
-    <snapshotRepository>
-      <id>snapshots</id>
-      <url>https://maven.carzone365.com/repository/maven-snapshots/</url>
-    </snapshotRepository>
+<!--    <repository>-->
+<!--      <id>releases</id>-->
+<!--      <url>https://maven.carzone365.com/repository/maven-releases/</url>-->
+<!--    </repository>-->
+<!--    <snapshotRepository>-->
+<!--      <id>snapshots</id>-->
+<!--      <url>https://maven.carzone365.com/repository/maven-snapshots/</url>-->
+<!--    </snapshotRepository>-->
   </distributionManagement>
 
   <build>

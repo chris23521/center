@@ -11,7 +11,7 @@
 
   <!-- 使用zookeeper注册中心暴露服务地址 -->
 
-  <dubbo:registry protocol="zookeeper" address="zookeeper://localhost:2181" wait="2000" timeout="5000"/>
+<!--  <dubbo:registry protocol="zookeeper" address="zookeeper://localhost:2181" wait="2000" timeout="5000"/>-->
 
 <!--  <dubb:reference registry="aaa" id="menuServiceFacade" interface="com.ncarzone.authcenter.facade.service.menu.MenuServiceFacade" version="1.0.0" timeout="5000" check="true" />-->
 

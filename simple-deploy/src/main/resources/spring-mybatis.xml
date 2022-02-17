@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="mysqlDruidDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init"
+          destroy-method="close">
+        <!-- 驱动、连接串、用户名、密码 -->
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="url"
+                  value="jdbc:mysql://localhost:3306/redis?useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true&amp;zeroDateTimeBehavior=convertToNull&amp;serverTimezone=GMT%2B8&amp;useSSL=false"/>
+        <property name="username" value="root"/>
+        <property name="password" value="root"/>
+        <!-- 连接池连接数初始化20、最小20、最大200 -->
+        <property name="initialSize" value="10"/>
+        <property name="minIdle" value="10"/>
+        <property name="maxActive" value="30"/>
+        <!-- 配置从连接池获取连接等待超时的时间 -->
+        <property name="maxWait" value="1000"/>
+
+        <!-- 是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭 -->
+        <property name="poolPreparedStatements" value="false"/>
+        <!-- 要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true -->
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="-1"/>
+        <property name="keepAlive" value="true"/>
+        <!-- 如果连接空闲并且超过minIdle以外的连接并且空闲时间超过minEvictableIdleTimeMillis设置的值则直接物理关闭。在minIdle以内的不处理 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <!-- 池中的连接空闲多少分钟后被回收,配置值是5分钟 -->
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+        <!-- 用来检测连接是否有效的sql，要求是一个查询语句。如果validationQuery为null，testOnBorrow、testOnReturn、testWhileIdle都不会其作用。 -->
+        <property name="validationQuery" value="SELECT 'x'"/>
+        <!-- 建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。 -->
+        <property name="testWhileIdle" value="true"/>
+        <!-- 申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能 -->
+        <property name="testOnBorrow" value="true"/>
+        <!-- 归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能 -->
+        <property name="testOnReturn" value="false"/>
+        <!-- 连接泄露检查，打开removeAbandoned功能 , 连接从连接池借出后，长时间不归还，将触发强制回连接。回收周期随timeBetweenEvictionRunsMillis进行，如果连接为从连接池借出状态，并且未执行任何sql，并且从借出时间起已超过removeAbandonedTimeout时间，则强制归还连接到连接池中。 -->
+        <property name="removeAbandoned" value="true"/>
+        <!-- 超时时间；单位为秒。180秒=3分钟 -->
+        <property name="removeAbandonedTimeout" value="180"/>
+        <!-- 查询监控 -->
+        <property name="proxyFilters">
+            <list>
+                <ref bean="stat-filter-price"/>
+                <ref bean="log-filter-price"/>
+            </list>
+        </property>
+        <property name="useGlobalDataSourceStat" value="true"/>
+    </bean>
+
+    <!-- Druid 慢sql监控 -->
+    <bean id="stat-filter-price" class="com.alibaba.druid.filter.stat.StatFilter">
+        <property name="slowSqlMillis" value="1000"/>
+        <property name="logSlowSql" value="true"/>
+        <property name="mergeSql" value="true"/>
+    </bean>
+
+    <bean id="log-filter-price" class="com.alibaba.druid.filter.logging.Slf4jLogFilter">
+        <property name="statementExecutableSqlLogEnable" value="true"/>
+    </bean>
+
+
+    <!-- sqlSessionfactoryBean -->
+    <bean id="sqlSessionFactoryMySQL" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="mysqlDruidDataSource"></property>
+        <property name="mapperLocations" value="classpath*:com/bili/data/redis/center/dao/mapper/*.xml"/>
+        <property name="plugins">
+            <array>
+                <bean id="dalInterceptor" class="com.bili.data.redis.center.dao.interceptor.DalInterceptor"/>
+            </array>
+        </property>
+    </bean>
+
+
+    <!-- spring与mybatis整合配置，扫描所有dao -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.bili.data.redis.center.dao.mapper"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryMySQL"/>
+    </bean>
+
+
+</beans>
